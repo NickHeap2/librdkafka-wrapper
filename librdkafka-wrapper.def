@@ -1,0 +1,10 @@
+LIBRARY librdkafka-wrapper
+Description  ’librdkafka-wrapper’
+EXPORTS
+  wrapper_get_last_error
+  wrapper_add_to_config
+  wrapper_create_consumer
+  wrapper_subscribe_to_topic
+  wrapper_get_message
+  wrapper_destroy_message
+  wrapper_destroy_consumer
