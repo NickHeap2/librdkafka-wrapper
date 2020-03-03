@@ -13,7 +13,7 @@
       "variables": []
     },
     {
-      "name": "WSL-Debug",
+      "name": "WSL-Ubuntu-Debug",
       "generator": "Unix Makefiles",
       "configurationType": "Debug",
       "buildRoot": "${projectDir}\\out\\build\\${name}",
@@ -23,7 +23,22 @@
       "buildCommandArgs": "",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "linux_x64" ],
-      "wslPath": "${defaultWSLPath}",
+      "wslPath": "C:\\Users\\Nick Heap\\AppData\\Local\\Microsoft\\WindowsApps\\ubuntu.exe",
+      "addressSanitizerRuntimeFlags": "detect_leaks=0",
+      "variables": []
+    },
+    {
+      "name": "WSL-Centos-Debug",
+      "generator": "Unix Makefiles",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeExecutable": "/usr/bin/cmake3",
+      "cmakeCommandArgs": "",
+      "buildCommandArgs": "",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "linux_x64" ],
+      "wslPath": "D:/Downloads/CentOS7/CentOS7.exe",
       "addressSanitizerRuntimeFlags": "detect_leaks=0",
       "variables": []
     }

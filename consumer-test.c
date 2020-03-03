@@ -1,17 +1,18 @@
+#include <stdlib.h>
 #include <signal.h>
 #include <stdio.h>
-#include "librdkafka-wrapper.h"
+#include <string.h>
+#include "oekafka-wrapper.h"
 
 static volatile sig_atomic_t consume_messages = 1;
 
 static void stop(int signal) {
-    fprintf(stderr, "Closing and destroying consumer...\n");
     consume_messages = 0;
 }
 
-static int set_config_option(char* configname, char* configvalue)
+static int set_config_option(char *configname, char *configvalue)
 {
-    char* errstr;
+    char *errstr;
 
     int result = wrapper_add_to_config(configname, configvalue);
     errstr = wrapper_get_last_error();
@@ -28,16 +29,15 @@ static int set_config_option(char* configname, char* configvalue)
 
 int main()
 {
-
-    char* brokers = "localhost:9092";
-    char* consumer_group = "rdkafka-consumer-group-1";
-    char* topic = "test-topic-1";
-    char* offset_reset = "earliest";
-    char* debug = "";
+    char *brokers = "host.docker.internal:9092";
+    char *consumer_group = "rdkafka-consumer-group-1";
+    char *topic = "test-topic-1";
+    char *offset_reset = "earliest";
+    char *debug = "";
 
     int timeout = 1000;
 
-    char* errstr;
+    char *errstr;
 
     /* trap ctrl-c and cleanly stop consumer */
     signal(SIGINT, stop);
@@ -51,6 +51,7 @@ int main()
     }
     set_config_option("bootstrap.servers", brokers);
     set_config_option("group.id", consumer_group);
+    set_config_option("auto.offset.reset", offset_reset);
 
     /* create the consumer */
     fprintf(stdout, "Creating consumer...\n");
@@ -84,7 +85,7 @@ int main()
 
     while (consume_messages)
     {
-        rd_kafka_message_t* rkm;
+        rd_kafka_message_t *rkm;
 
         fprintf(stdout, "Getting next message with %dms timeout...\n", timeout);
         rkm = wrapper_get_message(timeout);
@@ -122,5 +123,6 @@ int main()
         }
     }
 
+    fprintf(stderr, "Closing and destroying consumer...\n");
     wrapper_destroy_consumer();
 }

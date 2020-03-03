@@ -1,2 +1,2 @@
-# librdkafka-wrapper
+# oekafka-wrapper
 C wrapper for librdkafka for OpenEdge

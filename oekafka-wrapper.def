@@ -1,5 +1,5 @@
-LIBRARY librdkafka-wrapper
-Description  ’librdkafka-wrapper’
+LIBRARY oekafka-wrapper
+Description  ’oekafka-wrapper’
 EXPORTS
   wrapper_get_last_error
   wrapper_add_to_config
@@ -8,3 +8,7 @@ EXPORTS
   wrapper_get_message
   wrapper_destroy_message
   wrapper_destroy_consumer
+  wrapper_create_producer
+  wrapper_destroy_producer
+  wrapper_produce_message
+  wrapper_produce_this_message
