@@ -2,7 +2,8 @@
 #pragma once
 #ifndef _OEKAFKAWRAPPER_H
 #define _OEKAFKAWRAPPER_H
-#include "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/rdkafka.h"
+//#include "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/rdkafka.h"
+#include <rdkafka.h>
 
 char* wrapper_get_last_error();
 int wrapper_add_to_config(char *configname, char *configvalue);

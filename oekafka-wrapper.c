@@ -4,7 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/rdkafka.h"
+//#include "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/rdkafka.h"
+#include <rdkafka.h>
 
 static rd_kafka_conf_t *conf;
 static rd_kafka_t *rkc;
@@ -146,6 +147,8 @@ int wrapper_produce_this_message(char *topic, rd_kafka_message_t *message)
 {
     rd_kafka_resp_err_t err;
 
+    int events = rd_kafka_poll(rkp, 0);
+    //fprintf(stdout, "  Polled %d events\n", events);
     err = rd_kafka_producev(rkp,
         RD_KAFKA_V_TOPIC(topic),
         RD_KAFKA_V_KEY(message->key, message->key_len),
@@ -162,6 +165,8 @@ int wrapper_produce_message(char *topic, char *key, size_t key_len, char *payloa
 {
     rd_kafka_resp_err_t err;
 
+    int events = rd_kafka_poll(rkp, 0);
+    //fprintf(stdout, "  Polled %d events\n", events);
     err = rd_kafka_producev(rkp,
         RD_KAFKA_V_TOPIC(topic),
         RD_KAFKA_V_KEY(key, key_len),

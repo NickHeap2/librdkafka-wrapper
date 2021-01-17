@@ -1,3 +1,5 @@
 ﻿.vs
 out
 packages
+CMakeFiles
+oeclient

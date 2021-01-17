@@ -10,7 +10,7 @@ static void stop(int signal) {
     consume_messages = 0;
 }
 
-static int set_config_option(char *configname, char *configvalue)
+static void set_config_option(char *configname, char *configvalue)
 {
     char *errstr;
 

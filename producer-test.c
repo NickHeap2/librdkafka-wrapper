@@ -4,13 +4,30 @@
 #include <string.h>
 #include "oekafka-wrapper.h"
 
+#ifdef LINUX
+#include <unistd.h>
+#endif
+#ifdef WINDOWS
+#include <windows.h>
+#endif
+
 static volatile sig_atomic_t produce_messages = 1;
+
+void sleeper(int sleepMs)
+{
+#ifdef LINUX
+    usleep(sleepMs * 1000);   // usleep takes sleep time in us (1 millionth of a second)
+#endif
+#ifdef WINDOWS
+    Sleep(sleepMs);
+#endif
+}
 
 static void stop(int signal) {
     produce_messages = 0;
 }
 
-static int set_config_option(char *configname, char *configvalue)
+static void set_config_option(char *configname, char *configvalue)
 {
     char *errstr;
 
@@ -50,6 +67,7 @@ int main()
         set_config_option("debug", debug);
     }
     set_config_option("bootstrap.servers", brokers);
+    set_config_option("linger.ms", "5");
 
     /* create the producer */
     fprintf(stdout, "Creating producer...\n");
@@ -82,7 +100,7 @@ int main()
             fprintf(stderr, "ERROR producing message returned: %s\n", errstr);
         }
 
-        sleep(1);
+        sleeper(1);
     }
 
     fprintf(stderr, "Closing and destroying producer...\n");
