@@ -24,3 +24,11 @@ WORKDIR /opt/cmake/
 
 RUN cmake3 -G "Unix Makefiles"  -DCMAKE_BUILD_TYPE:STRING="Debug" -DCMAKE_INSTALL_PREFIX:PATH="/opt/cmake/out/install"  --build /opt/cmake/
 RUN cmake3 --build . --target install
+
+#add confluent repos
+COPY confluent.repo /etc/yum.repos.d/
+
+RUN yum erase -y librdkafka librdkafka-devel
+
+#install rdkafka and serdes
+RUN yum install -y confluent-libserdes.x86_64 librdkafka1

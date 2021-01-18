@@ -3,3 +3,4 @@
 !*.def
 !*.h
 !CMakeLists.txt
+!confluent.repo

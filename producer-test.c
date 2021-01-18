@@ -83,26 +83,127 @@ int main()
     {
         fprintf(stdout, "WARNING create producer returned: %s\n", errstr);
     }
-
-    while (produce_messages)
+    
+    // create serdes instance
+    fprintf(stdout, "Creating serdes...\n");
+    result = wrapper_create_serdes("https://evt.dev.dhlparcel.co.uk:62151");
+    if (result != 0)
     {
-        // get delivery reports
-        //rd_kafka_poll(rk, 0/*non-blocking */);
-
-        char* key = "KEY0";
-        char* payload = "PAYLOAD0";
-
-        fprintf(stdout, "Producing message...\n");
-        int result = wrapper_produce_message(topic, key, strlen(key), payload, strlen(payload));
         errstr = wrapper_get_last_error();
-        if (strlen(errstr) > 0)
-        {
-            fprintf(stderr, "ERROR producing message returned: %s\n", errstr);
-        }
-
-        sleeper(1);
+        fprintf(stderr, "Failed to create serdes with result: %d\n", result);
+        fprintf(stderr, "Failed to create serdes with error: %s\n", errstr);
+        return -5;
     }
+
+    // read value schema
+    fprintf(stdout, "Reading value schema from file...\n");
+    FILE *valueschemafile = fopen("messageSchema.json", "rb");
+    char *valueschema = NULL;
+    size_t messagelen;
+    ssize_t bytes_read = getdelim(&valueschema, &messagelen, '\0', valueschemafile);
+    if (bytes_read == -1) {
+        return -6;
+    }
+
+    // register value schema
+    fprintf(stdout, "Registering value schema...\n");
+    result = wrapper_register_value_schema("test-topic-1-value", valueschema);
+    if (result != 0)
+    {
+        errstr = wrapper_get_last_error();
+        fprintf(stderr, "Failed to register value schema with result: %d\n", result);
+        fprintf(stderr, "Failed to register value schema with error: %s\n", errstr);
+        return -7;
+    }
+   
+    // read key schema
+    fprintf(stdout, "Reading key schema from file...\n");
+    FILE* keyschemafile = fopen("keySchema.json", "rb");
+    char* keyschema = NULL;
+    size_t keylen;
+    bytes_read = getdelim(&keyschema, &keylen, '\0', keyschemafile);
+    if (bytes_read == -1) {
+        return -8;
+    }
+
+    // register key schema
+    fprintf(stdout, "Registering key schema...\n");
+    result = wrapper_register_key_schema("test-topic-1-key", keyschema);
+    if (result != 0)
+    {
+        errstr = wrapper_get_last_error();
+        fprintf(stderr, "Failed to register key schema with result: %d\n", result);
+        fprintf(stderr, "Failed to register key schema with error: %s\n", errstr);
+        return -9;
+    }
+
+
+    fprintf(stdout, "Creating message...\n");
+    result = wrapper_create_avro_message();
+    if (result != 0)
+    {
+        errstr = wrapper_get_last_error();
+        fprintf(stderr, "Failed to create avro mesasge with result: %d\n", result);
+        fprintf(stderr, "Failed to create avro mesasge with error: %s\n", errstr);
+        return -10;
+    }
+
+    fprintf(stdout, "Setting field value...\n");
+    result = wrapper_add_value_to_message_string("EventPayloadJson", "{ 'json_value': 'the_value' }");
+    if (result != 0)
+    {
+        errstr = wrapper_get_last_error();
+        fprintf(stderr, "Failed to set field value with result: %d\n", result);
+        fprintf(stderr, "Failed to set field value with error: %s\n", errstr);
+        return -11;
+    }
+
+    fprintf(stdout, "Getting field value...\n");
+    result = wrapper_get_value_from_message_string("EventPayloadJson");
+    if (result != 0)
+    {
+        errstr = wrapper_get_last_error();
+        fprintf(stderr, "Failed to get field value with result: %d\n", result);
+        fprintf(stderr, "Failed to get field value with error: %s\n", errstr);
+        return -12;
+    }
+    
+    fprintf(stdout, "Serialising message...\n");
+    result = wrapper_serialiase_and_send_message(topic, "KEY1");
+    if (result != 0)
+    {
+        errstr = wrapper_get_last_error();
+        fprintf(stderr, "Failed to serialise message with result: %d\n", result);
+        fprintf(stderr, "Failed to serialise message with error: %s\n", errstr);
+        return -13;
+    }
+
+    fprintf(stdout, "Destroying message...\n");
+    wrapper_destroy_avro_message();
+
+    //while (produce_messages)
+    //{
+    //    // get delivery reports
+    //    //rd_kafka_poll(rk, 0/*non-blocking */);
+    //    sleeper(1000);
+
+    //    char* key = "KEY0";
+    //    char* payload = "PAYLOAD0";
+
+
+
+    //    ////fprintf(stdout, "Producing message...\n");
+    //    //int result = wrapper_produce_message(topic, key, strlen(key), payload, strlen(payload));
+    //    //errstr = wrapper_get_last_error();
+    //    //if (strlen(errstr) > 0)
+    //    //{
+    //    //    //fprintf(stderr, "ERROR producing message returned: %s\n", errstr);
+    //    //}
+
+    //}
 
     fprintf(stderr, "Closing and destroying producer...\n");
     wrapper_destroy_producer();
+    fprintf(stderr, "Closing and destroying serdes...\n");
+    wrapper_destroy_serdes();
 }

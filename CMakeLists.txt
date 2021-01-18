@@ -17,7 +17,7 @@ set(SOURCE_FILES oekafka-wrapper.c oekafka-wrapper.h oekafka-wrapper.def)
 
 #add_library (oekafka-wrapper-static STATIC ${SOURCE_FILES})
 add_library (oekafka-wrapper SHARED ${SOURCE_FILES})
-target_include_directories(oekafka-wrapper PRIVATE "/usr/include/librdkafka/" "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/")
+target_include_directories(oekafka-wrapper PRIVATE "." "avro" "rdkafka" "serdes" "/usr/include/librdkafka/" "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/")
 
 set_property(TARGET oekafka-wrapper
     PROPERTY SOVERSION 1)
@@ -36,19 +36,19 @@ set_property(TARGET oekafka-wrapper
 set(CONSUMER_SOURCE_FILES consumer-test.c oekafka-wrapper.h)
 add_executable (consumer-test ${CONSUMER_SOURCE_FILES})
 target_link_libraries(consumer-test oekafka-wrapper)
-target_include_directories(consumer-test PRIVATE "/usr/include/librdkafka/" "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/")
+target_include_directories(consumer-test PRIVATE "." "avro" "rdkafka" "serdes" "/usr/include/librdkafka/" "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/")
 
 # add producer test executable
 set(PRODUCER_SOURCE_FILES producer-test.c oekafka-wrapper.h)
 add_executable (producer-test ${PRODUCER_SOURCE_FILES})
 target_link_libraries(producer-test oekafka-wrapper)
-target_include_directories(producer-test PRIVATE "/usr/include/librdkafka/" "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/")
+target_include_directories(producer-test PRIVATE "." "avro" "rdkafka" "serdes" "/usr/include/librdkafka/" "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/")
 
 # add combined test executable
 set(COMBINED_SOURCE_FILES combined-test.c oekafka-wrapper.h)
 add_executable (combined-test ${COMBINED_SOURCE_FILES})
 target_link_libraries(combined-test oekafka-wrapper)
-target_include_directories(combined-test PRIVATE "/usr/include/librdkafka/" "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/")
+target_include_directories(combined-test PRIVATE "." "avro" "rdkafka" "serdes" "/usr/include/librdkafka/" "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/")
 
 
 #set_property(TARGET wrapper-test
@@ -59,11 +59,12 @@ target_include_directories(combined-test PRIVATE "/usr/include/librdkafka/" "pac
 #                          "${CMAKE_CURRENT_SOURCE_DIR}"
 #                          )
 
+#libkafka
 if (UNIX)
-    message(STATUS "Finding Linux library")
+    message(STATUS "Finding Linux libkafka library")
     #find_library(LIBRDKAFKA librdkafka.so PATHS ${CMAKE_CURRENT_SOURCE_DIR}/packages/librdkafka.redist.1.3.0/runtimes/linux-x64/native/)
     #find_library(LIBRDKAFKA centos7-librdkafka.so PATHS ${CMAKE_CURRENT_SOURCE_DIR}/packages/librdkafka.redist.1.3.0/runtimes/linux-x64/native/)
-    find_library(LIBRDKAFKA librdkafka.so.1 PATHS /lib64/)
+    find_library(LIBRDKAFKA librdkafka.so.1 PATHS /usr/lib64/)
 else()
     message(STATUS "IS NOT UNIX")
     find_library(LIBRDKAFKA librdkafka.lib PATHS ${CMAKE_CURRENT_SOURCE_DIR}/packages/librdkafka.redist.1.3.0/build/native/lib/win/x64/win-x64-Release/v120/)
@@ -77,6 +78,48 @@ else()
     #target_link_libraries(oekafka-wrapper-static ${LIBRDKAFKA})
     target_link_libraries(oekafka-wrapper ${LIBRDKAFKA})
 endif()
+
+#libserdes
+if (UNIX)
+    message(STATUS "Finding Linux libserdes library")
+    #find_library(LIBRDKAFKA librdkafka.so PATHS ${CMAKE_CURRENT_SOURCE_DIR}/packages/librdkafka.redist.1.3.0/runtimes/linux-x64/native/)
+    #find_library(LIBRDKAFKA centos7-librdkafka.so PATHS ${CMAKE_CURRENT_SOURCE_DIR}/packages/librdkafka.redist.1.3.0/runtimes/linux-x64/native/)
+    find_library(LIBSERDES libserdes.so.1 PATHS /usr/lib64/)
+endif()
+
+if(NOT LIBSERDES)
+    message(FATAL_ERROR "LIBSERDES library not found!")
+else()
+    message(STATUS "Found LIBSERDES: " ${LIBSERDES})
+#    target_link_libraries(wrapper-test ${LIBRDKAFKA})
+    #target_link_libraries(oekafka-wrapper-static ${LIBRDKAFKA})
+    target_link_libraries(oekafka-wrapper ${LIBSERDES})
+endif()
+
+#libavro
+if (UNIX)
+    message(STATUS "Finding Linux libavro library")
+    find_library(LIBAVRO libavro.so.23.0.0 PATHS /usr/lib64/)
+endif()
+
+if(NOT LIBAVRO)
+    message(FATAL_ERROR "LIBAVRO library not found!")
+else()
+    message(STATUS "Found LIBAVRO: " ${LIBAVRO})
+endif()
+
+#libavrocpp
+if (UNIX)
+    message(STATUS "Finding Linux libavrocpp library")
+    find_library(LIBAVROCPP libavrocpp.so.1.8.0.0 PATHS /usr/lib64/)
+endif()
+
+if(NOT LIBAVROCPP)
+    message(FATAL_ERROR "LIBAVROCPP library not found!")
+else()
+    message(STATUS "Found LIBAVROCPP: " ${LIBAVROCPP})
+endif()
+
 
 if (NOT UNIX)
     configure_file(${CMAKE_CURRENT_SOURCE_DIR}/packages.config
@@ -117,7 +160,7 @@ install(TARGETS combined-test
 
 if (UNIX)
     #install(DIRECTORY "${PROJECT_SOURCE_DIR}/packages/librdkafka.redist.1.3.0/runtimes/linux-x64/native/"
-    install(FILES ${LIBRDKAFKA}
+    install(FILES ${LIBRDKAFKA} ${LIBSERDES} ${LIBAVRO} ${LIBAVROCPP}
             DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
 else()
     install(DIRECTORY "${PROJECT_SOURCE_DIR}/packages/librdkafka.redist.1.3.0/runtimes/win-x64/native/"
