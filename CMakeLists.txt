@@ -14,6 +14,7 @@ project (oekafka-wrapper VERSION 1.0 LANGUAGES C)
 
 # shared source files
 set(SOURCE_FILES oekafka-wrapper.c oekafka-wrapper.h oekafka-wrapper.def)
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLINUX -g")
 
 #add_library (oekafka-wrapper-static STATIC ${SOURCE_FILES})
 add_library (oekafka-wrapper SHARED ${SOURCE_FILES})

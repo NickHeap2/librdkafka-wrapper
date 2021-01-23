@@ -3,3 +3,6 @@ out
 packages
 CMakeFiles
 oeclient
+Makefile
+CMakeCache.txt
+cmake_install.cmake

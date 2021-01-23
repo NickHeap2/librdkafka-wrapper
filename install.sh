@@ -1,1 +1,1 @@
-cmake3 --build . --target install
+cmake3 --build /mnt/d/workspaces/nickheap2/librdkafka-wrapper/out/build/WSL-Centos-Debug --target install

@@ -12,6 +12,7 @@ EXPORTS
   wrapper_destroy_producer
   wrapper_produce_message
   wrapper_produce_this_message
+  wrapper_create_serdes_conf
   wrapper_create_serdes
   wrapper_add_to_serdes_config
   wrapper_register_value_schema
@@ -23,3 +24,13 @@ EXPORTS
   wrapper_destroy_avro_message
   wrapper_destroy_serdes
   wrapper_serialiase_and_send_message
+  wrapper_destroy_avro_value
+  wrapper_deserialiase_message_key
+  wrapper_deserialiase_message_value
+  wrapper_get_avro_string
+  wrapper_get_key_from_message
+  wrapper_get_value_field
+  wrapper_extract_key_and_value
+  wrapper_get_key
+  wrapper_get_value_field_string
+  void wrapper_clear_values

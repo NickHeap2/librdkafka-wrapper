@@ -1,0 +1,26 @@
+{
+   ignore libcurl
+   Memcheck:Leak
+   ...
+   obj:*/lib*/libcurl.so.*
+}
+{
+   ignore_libssl
+   Memcheck:Leak
+   ...
+   obj:*/lib*/libssl333.so.*
+}
+{
+   ignore_libssl
+   Memcheck:Leak
+   ...
+   obj:*/lib*/libnss3.so
+}
+{
+   ignore_libssl
+   Memcheck:Leak
+   ...
+   obj:*/lib*/libsqlite3.so.*
+}
+
+
