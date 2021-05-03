@@ -46,9 +46,11 @@ static void set_config_option(char *configname, char *configvalue)
 
 int main()
 {
-    char *brokers = "host.docker.internal:9092";
+    //char *brokers = "host.docker.internal:9092";
+    char *brokers = "51dsvr-mic-sv01.dev.dhlparcel.co.uk:62112";
     char *consumer_group = "rdkafka-consumer-group-1";
     char *topic = "test-topic-1";
+    //char *topic = "dhlparcel-uk-consignment-event-received";
     char *offset_reset = "earliest";
     char *debug = "";
 
@@ -69,6 +71,11 @@ int main()
     set_config_option("bootstrap.servers", brokers);
     set_config_option("group.id", consumer_group);
     set_config_option("auto.offset.reset", offset_reset);
+    set_config_option("security.protocol", "SASL_SSL");
+    set_config_option("sasl.mechanism", "PLAIN");
+    set_config_option("sasl.username", "kafkabroker");
+    set_config_option("sasl.password", "dhruv_will_set_it");
+    set_config_option("ssl.certificate.location", "qa-dhlparcel-co-uk.cer");
 
     /* create the consumer */
     fprintf(stdout, "Creating consumer...\n");
@@ -95,6 +102,11 @@ int main()
     set_config_option("bootstrap.servers", brokers);
     set_config_option("group.id", consumer_group);
     set_config_option("auto.offset.reset", offset_reset);
+    set_config_option("security.protocol", "SASL_SSL");
+    set_config_option("sasl.mechanism", "PLAIN");
+    set_config_option("sasl.username", "kafkabroker");
+    set_config_option("sasl.password", "dhruv_will_set_it");
+    set_config_option("ssl.certificate.location", "qa-dhlparcel-co-uk.cer");
     set_config_option("linger.ms", "5");
 
     /* create the producer */

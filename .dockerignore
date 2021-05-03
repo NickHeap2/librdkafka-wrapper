@@ -3,4 +3,5 @@
 !*.def
 !*.h
 !CMakeLists.txt
+!qa-dhlparcel-co-uk.cer
 !confluent.repo

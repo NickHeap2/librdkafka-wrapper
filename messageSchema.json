@@ -1,0 +1,32 @@
+{
+  "type": "record",
+  "name": "KafkaEvent",
+  "namespace": "dhlparcel.uk.kafkaeventingestor",
+  "fields": [
+    {
+      "name": "EventPayloadJson",
+      "type": "string",
+      "doc": "event_payload_json"
+    },
+    {
+      "name": "EventDestination",
+      "type": "string",
+      "doc": "event_destination"
+    },
+    {
+      "name": "EventTime",
+      "type": "string",
+      "doc": "event_time"
+    },
+    {
+      "name": "StagedEventsKey",
+      "type": "string",
+      "doc": "StagedEventsKey"
+    },
+    {
+      "name": "Id",
+      "type": "long",
+      "doc": "Id"
+    }
+  ]
+}

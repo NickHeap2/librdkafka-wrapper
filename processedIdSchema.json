@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "KafkaProcessedId",
+  "namespace": "dhlparcel.uk.kafkaeventingestor",
+  "fields": [
+    {
+      "name": "Id",
+      "type": "string",
+      "doc": "Id"
+    }
+  ]
+}

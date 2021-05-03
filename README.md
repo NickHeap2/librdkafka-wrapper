@@ -20,3 +20,10 @@ Centos 7 WSL image
 
 	copy confluent.repo /etc/yum.repo.d/
 	yum install -y confluent-libserdes-devel.x86_64
+
+	When on VPN /etc/resolve.conf should be:
+		nameserver 10.214.160.10
+		search business-post.com
+
+	For remote debugging:
+		yum install gdb

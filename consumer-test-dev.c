@@ -64,10 +64,10 @@ int main()
     
     //char* serdesUrl = "https://evt.dev.dhlparcel.co.uk:62151";
 
-    char* brokers = "51qsvr-evt-sv01.qa.dhlparcel.co.uk:62112,51qsvr-evt-sv02.qa.dhlparcel.co.uk:62122,51qsvr-evt-sv03.qa.dhlparcel.co.uk:62132";
-    char* serdesUrl = "https://51qsvr-evt-sv01.qa.dhlparcel.co.uk:62151,https://51qsvr-evt-sv02.qa.dhlparcel.co.uk:62151,https://51qsvr-evt-sv03.qa.dhlparcel.co.uk:62151";
+    char* brokers = "51dsvr-mic-sv01.dev.dhlparcel.co.uk:62112";
+    char* serdesUrl = "https://evt.dev.dhlparcel.co.uk:62151";
     char* consumer_group = "opsys-event-enricher";
-    char* topic = "dhlparcel-uk-consignment-offset-0";
+    char* topic = "device.messaged.offset";
 
     //topic = "dhlparcel-uk-consignment-event-received";
     char *offset_reset = "latest";
@@ -80,6 +80,12 @@ int main()
 
     // trap ctrl-c and cleanly stop consumer
     signal(SIGINT, stop);
+
+
+    fprintf(stdout, "Brokers: %s\n", brokers);
+    fprintf(stdout, "serdesUrl: %s\n", serdesUrl);
+    fprintf(stdout, "consumer_group: %s\n", consumer_group);
+    fprintf(stdout, "topic: %s\n", topic);
 
     // add to config*
     fprintf(stdout, "Setting config options...\n");

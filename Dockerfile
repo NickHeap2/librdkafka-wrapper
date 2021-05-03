@@ -25,6 +25,8 @@ WORKDIR /opt/cmake/
 RUN cmake3 -G "Unix Makefiles"  -DCMAKE_BUILD_TYPE:STRING="Debug" -DCMAKE_INSTALL_PREFIX:PATH="/opt/cmake/out/install"  --build /opt/cmake/
 RUN cmake3 --build . --target install
 
+COPY qa-dhlparcel-co-uk.cer /opt/cmake/out/install/WSL-Centos-Debug/bin/
+
 #add confluent repos
 COPY confluent.repo /etc/yum.repos.d/
 
