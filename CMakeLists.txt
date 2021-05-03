@@ -39,6 +39,12 @@ add_executable (consumer-test ${CONSUMER_SOURCE_FILES})
 target_link_libraries(consumer-test oekafka-wrapper)
 target_include_directories(consumer-test PRIVATE "." "avro" "rdkafka" "serdes" "/usr/include/librdkafka/" "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/")
 
+# add consumer dev test executable
+set(CONSUMER_DEV_SOURCE_FILES consumer-test-dev.c oekafka-wrapper.h)
+add_executable (consumer-test-dev ${CONSUMER_DEV_SOURCE_FILES})
+target_link_libraries(consumer-test-dev oekafka-wrapper)
+target_include_directories(consumer-test-dev PRIVATE "." "avro" "rdkafka" "serdes" "/usr/include/librdkafka/" "packages/librdkafka.redist.1.3.0/build/native/include/librdkafka/")
+
 # add producer test executable
 set(PRODUCER_SOURCE_FILES producer-test.c oekafka-wrapper.h)
 add_executable (producer-test ${PRODUCER_SOURCE_FILES})
@@ -148,6 +154,10 @@ install(TARGETS oekafka-wrapper
 #)
 
 install(TARGETS consumer-test
+  DESTINATION bin/
+)
+
+install(TARGETS consumer-test-dev
   DESTINATION bin/
 )
 

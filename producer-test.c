@@ -210,7 +210,7 @@ int main()
         }
 
         fprintf(stdout, "Serialising message...\n");
-        result = wrapper_serialiase_and_send_message(topic, "KEY1");
+        result = wrapper_serialise_and_send_message(topic, "KEY1");
         if (result != 0)
         {
             errstr = wrapper_get_last_error();

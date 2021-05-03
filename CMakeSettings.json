@@ -28,19 +28,25 @@
       "variables": []
     },
     {
-      "name": "WSL-Centos-Debug",
-      "generator": "Unix Makefiles",
-      "configurationType": "Debug",
-      "buildRoot": "${projectDir}\\out\\build\\${name}",
-      "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeExecutable": "/usr/bin/cmake3",
-      "cmakeCommandArgs": "",
-      "buildCommandArgs": "",
-      "ctestCommandArgs": "",
-      "inheritEnvironments": [ "linux_x64" ],
-      "wslPath": "D:/Downloads/CentOS7/CentOS7.exe",
-      "addressSanitizerRuntimeFlags": "detect_leaks=0",
-      "variables": []
+        "environments": [
+            {
+                "LD_LIBRARY_PATH": "/mnt/d/workspaces/nickheap2/librdkafka-wrapper/out/install/WSL-Centos-Debug/bin/"
+            }
+        ],
+
+        "name": "WSL-Centos-Debug",
+        "generator": "Unix Makefiles",
+        "configurationType": "Debug",
+        "buildRoot": "${projectDir}\\out\\build\\${name}",
+        "installRoot": "${projectDir}\\out\\install\\${name}",
+        "cmakeExecutable": "/usr/bin/cmake3",
+        "cmakeCommandArgs": "",
+        "buildCommandArgs": "",
+        "ctestCommandArgs": "",
+        "inheritEnvironments": [ "linux_x64" ],
+        "wslPath": "D:/Downloads/CentOS7/CentOS7.exe",
+        "addressSanitizerRuntimeFlags": "detect_leaks=0",
+        "variables": []
     }
   ]
 }
